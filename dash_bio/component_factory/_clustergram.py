@@ -9,7 +9,7 @@ import scipy.spatial as scs
 from sklearn.impute import SimpleImputer
 
 import plotly.graph_objects as go
-from plotly import tools
+from plotly import subplots
 
 
 # pylint: disable=assignment-from-no-return, no-self-use
@@ -384,7 +384,7 @@ Methods:
         # [row dendro] [heatmap]     [heatmap]     [row GM]
         # [row dendro] [heatmap]     [heatmap]     [row GM]
         # [empty]      [col. GM]     [col. GM]     [empty]
-        fig = tools.make_subplots(
+        fig = subplots.make_subplots(
             rows=4,
             cols=4,
             specs=[
