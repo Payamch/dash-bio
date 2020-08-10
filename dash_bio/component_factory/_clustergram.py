@@ -10,6 +10,7 @@ from sklearn.impute import SimpleImputer
 
 import plotly.graph_objects as go
 from plotly import subplots
+import plotly.figure_factory as ff
 
 
 # pylint: disable=assignment-from-no-return, no-self-use
@@ -550,7 +551,7 @@ Methods:
             if self._center_values:
                 heat_data = np.subtract(heat_data, np.mean(heat_data))
 
-            heatmap = go.Heatmap(
+            heatmap = ff.create_annotated_heatmap(
                 x=tickvals_col,
                 y=tickvals_row,
                 z=heat_data,
@@ -558,7 +559,15 @@ Methods:
                 colorbar={"xpad": 50},
             )
 
-        fig.append_trace(heatmap, 2, 2)
+        for annot in heatmap['layout']['annotations']:
+            annot['xref'] = 'x5'
+            annot['yref'] = 'y5'
+
+        for data in heatmap['data']:
+            fig.add_trace(data, 2 ,2)
+
+        annot = list(heatmap.layout.annotations)
+        fig.update_layout(annotations=annot)
 
         # hide all legends
         fig["layout"].update(showlegend=False,)
