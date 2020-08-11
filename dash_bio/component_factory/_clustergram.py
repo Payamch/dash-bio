@@ -478,14 +478,6 @@ Methods:
 
         (row_dendro_traces, col_dendro_traces) = self._sort_traces(dt["row"], dt["col"])
 
-        for i in range(len(col_dendro_traces)):
-            cdt = col_dendro_traces[i]
-            cdt["name"] = "Col Cluster %d" % i
-            cdt["line"] = dict(width=self._line_width[1])
-            cdt["hoverinfo"] = "y+name"
-            cluster_curve_numbers[len(fig.data)] = ["col", i]
-            fig.append_trace(cdt, 1, 2)
-
         # row dendrogram (displays on left side)
         for i in range(len(row_dendro_traces)):
             rdt = row_dendro_traces[i]
@@ -557,6 +549,7 @@ Methods:
                 z=heat_data,
                 colorscale=self._color_map,
                 colorbar={"xpad": 50},
+                font_colors = ['black'],
             )
 
         for annot in heatmap['layout']['annotations']:
@@ -566,8 +559,8 @@ Methods:
         for data in heatmap['data']:
             fig.add_trace(data, 2 ,2)
 
-        annot = list(heatmap.layout.annotations)
-        fig.update_layout(annotations=annot)
+        #causes some performance degregation in zooming
+        fig.update_layout(annotations=heatmap.layout.annotations)
 
         # hide all legends
         fig["layout"].update(showlegend=False,)
