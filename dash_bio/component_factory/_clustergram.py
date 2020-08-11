@@ -16,6 +16,7 @@ import plotly.figure_factory as ff
 # pylint: disable=assignment-from-no-return, no-self-use
 def Clustergram(
         data,
+        imputed=None,
         generate_curves_dict=False,
         return_computed_traces=False,
         computed_traces=None,
@@ -202,6 +203,7 @@ Methods:
     def __init__(
             self,
             data,
+            imputed= None,
             row_labels=None,
             column_labels=None,
             hidden_labels=None,
@@ -238,6 +240,8 @@ Methods:
         if isinstance(data, pd.DataFrame):
             data = data.select_dtypes('number')
             data = data.values
+        if isinstance(imputed, pd.DataFrame):
+            imputed = imputed.values
         if hidden_labels is None:
             hidden_labels = []
         if color_threshold is None:
@@ -248,6 +252,7 @@ Methods:
         column_ids = list(range(data.shape[1]))
 
         self._data = data
+        self._imputed = imputed
         self._row_labels = row_labels
         self._row_ids = row_ids
         self._column_labels = column_labels
@@ -358,6 +363,7 @@ Methods:
             (
                 dt,
                 self._data,
+                self._imputed,
                 self._row_ids,
                 self._column_ids,
             ) = self._compute_clustered_data()
@@ -538,6 +544,7 @@ Methods:
 
             # heatmap
             heat_data = self._data
+            imputed_data = self._imputed
 
             # symmetrize the heatmap about zero, if necessary
             if self._center_values:
@@ -547,6 +554,7 @@ Methods:
                 x=tickvals_col,
                 y=tickvals_row,
                 z=heat_data,
+                annotation_text=imputed_data,
                 colorscale=self._color_map,
                 colorbar={"xpad": 50},
                 font_colors = ['black'],
@@ -796,8 +804,9 @@ Methods:
         # then transpose and shuffle columns,
         # then transpose again
         clustered_data = self._data[rl_indices].T[cl_indices].T
+        clustered_imputed_data = self._imputed[rl_indices].T[cl_indices].T
 
-        return trace_list, clustered_data, clustered_row_ids, clustered_column_ids
+        return trace_list, clustered_data, clustered_imputed_data, clustered_row_ids, clustered_column_ids
 
     def _color_dendro_clusters(self, P, dim):
         """Color each cluster below the color threshold separately.
