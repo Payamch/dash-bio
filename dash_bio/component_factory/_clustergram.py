@@ -565,6 +565,7 @@ Methods:
                 colorscale=self._color_map,
                 colorbar={"xpad": 50},
                 font_colors = ['black'],
+				showscale = True
             )
 
         for annot in heatmap['layout']['annotations']:
