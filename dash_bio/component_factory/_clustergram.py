@@ -204,6 +204,7 @@ Methods:
             self,
             data,
             imputed= None,
+            pbias = None,
             row_labels=None,
             column_labels=None,
             hidden_labels=None,
@@ -242,6 +243,8 @@ Methods:
             data = data.values
         if isinstance(imputed, pd.DataFrame):
             imputed = imputed.values
+        if isinstance(pbias, pd.DataFrame):
+            pbias = pbias.values    
         if hidden_labels is None:
             hidden_labels = []
         if color_threshold is None:
@@ -253,6 +256,7 @@ Methods:
 
         self._data = data
         self._imputed = imputed
+        self._pbias = pbias
         self._row_labels = row_labels
         self._row_ids = row_ids
         self._column_labels = column_labels
@@ -552,6 +556,7 @@ Methods:
             # heatmap
             heat_data = self._data
             imputed_data = self._imputed
+            pbias = self._pbias
 
             # symmetrize the heatmap about zero, if necessary
             if self._center_values:
@@ -562,6 +567,7 @@ Methods:
                 y=tickvals_row,
                 z=heat_data,
                 annotation_text=imputed_data,
+                pbias=pbias,
                 colorscale=self._color_map,
                 colorbar={"xpad": 50},
                 font_colors = ['black'],
