@@ -17,6 +17,7 @@ import plotly.figure_factory as ff
 def Clustergram(
         data,
         imputed=None,
+        pbias=None,
         generate_curves_dict=False,
         return_computed_traces=False,
         computed_traces=None,
